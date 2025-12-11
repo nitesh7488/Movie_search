@@ -6,7 +6,9 @@ const connectDB = require('./config/db');
 const app = express();
 connectDB();
 
-app.use(cors());
+app.use(cors({
+  origin: "*",
+}));
 app.use(express.json());
 
 app.get('/', (req, res) => res.send('Movie API running'));
