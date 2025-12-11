@@ -36,15 +36,6 @@ router.get('/sorted', async (req, res) => {
   } catch (err) { res.status(500).json({ message: err.message }); }
 });
 
-// GET /movies/:id
-router.get('/:id', async (req, res) => {
-  try {
-    const movie = await Movie.findById(req.params.id);
-    if (!movie) return res.status(404).json({ message: 'Movie not found' });
-    res.json(movie);
-  } catch (err) { res.status(500).json({ message: err.message }); }
-});
-
 // admin routes
 router.post('/', protect, adminOnly, async (req, res) => {
   try {
