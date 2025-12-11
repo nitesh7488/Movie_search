@@ -15,9 +15,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import API from "../api/api";
 import { useNavigate } from "react-router-dom";
 
-// ----------------------------------------------------
-// ⭐ Configuration & State
-// ----------------------------------------------------
+
+// Configuration & State
+
 const NEON_COLOR = "#38c5ff";
 
 const initialMovieState = {
@@ -118,9 +118,9 @@ export default function AdminAdd() {
         setSnackbar({ ...snackbar, open: false });
     };
 
-    // ----------------------------------------------------
-    // ⭐ Styling Objects (Refined)
-    // ----------------------------------------------------
+    
+    //  Styling Objects (Refined)
+    
 
     const inputBaseStyle = {
         color: "#fff",
@@ -288,13 +288,13 @@ export default function AdminAdd() {
     );
 }
 
-// ----------------------------------------------------
-// ⭐ Component-Specific Styles
-// ----------------------------------------------------
+
+// Component-Specific Styles
+
 
 const styles = {
     mainContainer: {
-        minHeight: "100vh", // Adjusted for better viewing
+        minHeight: "100vh", 
         display: "flex",
         justifyContent: "center",
         alignItems: "flex-start",
@@ -305,7 +305,7 @@ const styles = {
     
     paperStyle: {
         width: "100%",
-        maxWidth: 700, // Slightly wider form
+        maxWidth: 700, 
         p: { xs: 3, sm: 5, md: 6 },
         borderRadius: 4,
         background: "rgba(255,255,255,0.06)",
@@ -313,7 +313,8 @@ const styles = {
         backdropFilter: "blur(14px)",
         color: "#fff",
         boxShadow: "0 10px 40px rgba(0,0,0,0.55)",
-        position: 'relative', // IMPORTANT for absolute positioning of the close button
+        position: 'relative', 
+        
         transition: "0.3s ease",
         "&:hover": {
             transform: "translateY(-4px)",
@@ -324,10 +325,10 @@ const styles = {
         position: 'absolute',
         top: 15,
         right: 15,
-        color: '#c7c7c7', // Muted white
+        color: '#c7c7c7', 
         zIndex: 10,
         '&:hover': {
-            color: NEON_COLOR, // Neon blue on hover
+            color: NEON_COLOR, 
             bgcolor: 'rgba(255, 255, 255, 0.1)',
             boxShadow: `0 0 10px ${NEON_COLOR}88`,
         },
@@ -338,7 +339,7 @@ const styles = {
         fontWeight: "800",
         textAlign: "center",
         mb: 4,
-        pt: { xs: 1, sm: 0 }, // Adjust space for close button
+        pt: { xs: 1, sm: 0 }, 
         color: NEON_COLOR,
         letterSpacing: "0.5px",
         fontSize: { xs: "1.8rem", sm: "2.6rem" },

@@ -17,21 +17,19 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import StarIcon from '@mui/icons-material/Star';
 import { Link } from 'react-router-dom';
 
-// ----------------------------------------------------
-// ⭐ Styling Configuration
-// ----------------------------------------------------
+
 const NEON_BLUE = "#6dd5fa";
 const DELETE_RED = "#ff4d4d";
 const posterFallback = 'https://picsum.photos/seed/movie-fallback/300/450';
 
-// Unified style for the administrative icons
+
 const adminActionIconStyle = (color) => ({
     color: color,
     transition: '0.3s ease',
-    p: 0.8, // Slightly larger touch target
+    p: 0.8, 
     borderRadius: '8px',
     '&:hover': {
-        bgcolor: `${color}1A`, // Light semi-transparent background on hover
+        bgcolor: `${color}1A`, 
         boxShadow: `0 0 10px ${color}88`,
         transform: 'scale(1.05)',
     },
@@ -39,9 +37,9 @@ const adminActionIconStyle = (color) => ({
 
 export default function MovieCard({ movie, admin = false, onDelete }) {
 
-    // Handler for delete action with confirmation
+    
     const handleDeleteClick = (e) => {
-        // Stop event propagation to prevent CardActionArea (link) from triggering
+        
         e.preventDefault(); 
         e.stopPropagation();
 

@@ -38,7 +38,7 @@ export default function App() {
 
   return (
     <>
-      {/* 🌟 PREMIUM NAVBAR */}
+      {/* PREMIUM NAVBAR */}
       <AppBar
         position="sticky"
         elevation={12}
@@ -118,7 +118,7 @@ export default function App() {
         </Toolbar>
       </AppBar>
 
-      {/* 📱 MOBILE DRAWER MENU */}
+      {/* MOBILE DRAWER MENU */}
       <Drawer anchor="right" open={open} onClose={toggleDrawer}>
         <Box sx={{ width: 240, p: 2 }}>
           <Typography
@@ -200,7 +200,7 @@ export default function App() {
   );
 }
 
-/* 🔥 NAV BUTTON (DESKTOP) */
+/*  NAV BUTTON (DESKTOP) */
 function NavButton({ to, children }) {
   return (
     <Button
@@ -225,7 +225,7 @@ function NavButton({ to, children }) {
   );
 }
 
-/* 📱 MOBILE NAV ITEM */
+/* MOBILE NAV ITEM */
 function MobileItem({ to, text }) {
   return (
     <ListItemButton component={Link} to={to}>

@@ -32,7 +32,7 @@ export default function Register() {
     }
   };
 
-  // 🔥 Reusable perfect input styles
+  //  Reusable perfect input styles
   const inputBaseStyle = {
     color: "#fff",
     fontSize: "1.05rem",

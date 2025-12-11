@@ -9,16 +9,16 @@ import {
     CircularProgress,
     Alert,
     Snackbar,
-    IconButton, // Import IconButton
-    Tooltip,    // Import Tooltip
+    IconButton, 
+    Tooltip,    
 } from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close'; // Import Close icon
+import CloseIcon from '@mui/icons-material/Close'; 
+
 import API from "../api/api";
 import { useNavigate, useParams } from "react-router-dom";
 
-// ----------------------------------------------------
-// ⭐ Default State & Configuration
-// ----------------------------------------------------
+
+
 
 const initialMovieState = {
     title: "",
@@ -118,7 +118,8 @@ export default function AdminEdit() {
             return;
         }
 
-        // Prepare data for the API (convert numeric strings back to numbers)
+        
+        
         const dataToSubmit = {
             ...movie,
             year: Number(movie.year),
@@ -132,7 +133,7 @@ export default function AdminEdit() {
                 message: "Movie Updated Successfully!",
                 severity: "success",
             });
-            // Optionally navigate back after a small delay to let the user see the success message
+            
             setTimeout(() => navigate("/"), 1500); 
         } catch (err) {
             console.error("Update Error:", err);
@@ -258,7 +259,7 @@ export default function AdminEdit() {
                         label="Description"
                         name="description"
                         multiline
-                        rows={6} // Increased rows for more space
+                        rows={6} 
                         fullWidth
                         value={movie.description}
                         onChange={handleChange}
@@ -292,11 +293,11 @@ export default function AdminEdit() {
     );
 }
 
-// ----------------------------------------------------
-// ⭐ Reusable Styling Objects
-// ----------------------------------------------------
 
-const NEON_COLOR = "#6dd5fa"; // Bright blue
+//  Reusable Styling Objects
+
+
+const NEON_COLOR = "#6dd5fa"; 
 const labelStyle = { style: { color: "#c7c7c7" } };
 
 // Neon Glow Input Style (for TextField component)
@@ -315,8 +316,8 @@ const inputGlow = {
         // Focused state (Glow effect)
         "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
             borderColor: NEON_COLOR,
-            boxShadow: `0 0 16px ${NEON_COLOR}88`, // Stronger glow
-            borderWidth: '2px', // Slightly thicker border on focus
+            boxShadow: `0 0 16px ${NEON_COLOR}88`, 
+            borderWidth: '2px', 
         },
         // Input text color
         "& .MuiInputBase-input": {
@@ -324,7 +325,7 @@ const inputGlow = {
         },
         // Error state color consistency
         "&.Mui-error .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#f44336 !important", // Red error color
+            borderColor: "#f44336 !important", 
             boxShadow: "0 0 8px #f4433688",
         }
     },
@@ -345,16 +346,16 @@ const styles = {
     
     paperStyle: {
         width: "100%",
-        maxWidth: 750, // Slightly wider for a more professional form look
-        p: { xs: 3, sm: 5, md: 7 }, // Increased padding inside the paper
+        maxWidth: 750, 
+        p: { xs: 3, sm: 5, md: 7 }, 
         borderRadius: 4, 
-        background: "rgba(255, 255, 255, 0.05)", // More subtle glass effect
-        border: "1px solid rgba(255,255,255,0.1)", // Thinner, lighter border
-        backdropFilter: "blur(20px)", // Stronger blur
+        background: "rgba(255, 255, 255, 0.05)", 
+        border: "1px solid rgba(255,255,255,0.1)", 
+        backdropFilter: "blur(20px)", 
         color: "#fff",
-        boxShadow: "0 10px 40px rgba(0,0,0,0.7)", // Deepest shadow
+        boxShadow: "0 10px 40px rgba(0,0,0,0.7)", 
         transition: "transform 0.3s ease",
-        position: 'relative', // IMPORTANT: Allows absolute positioning of the close button
+        position: 'relative', 
         "&:hover": {
             transform: "translateY(-4px)", 
         }
@@ -365,23 +366,23 @@ const styles = {
         position: 'absolute',
         top: 15,
         right: 15,
-        color: '#c7c7c7', // Muted white
+        color: '#c7c7c7', 
         zIndex: 10,
         '&:hover': {
-            color: NEON_COLOR, // Neon blue on hover
+            color: NEON_COLOR, 
             bgcolor: 'rgba(255, 255, 255, 0.1)',
             boxShadow: `0 0 10px ${NEON_COLOR}88`,
         },
-        // Adjust position on small screens
+        
         m: { xs: 1, sm: 2 },
     },
 
     titleStyle: {
         fontWeight: "800",
         textAlign: "center",
-        // Adjusted margin to account for the close button above it
+        
         mb: { xs: 3, sm: 5 },
-        pt: { xs: 1, sm: 0 }, // Small top padding adjustment for close button space
+        pt: { xs: 1, sm: 0 }, 
         background: `linear-gradient(90deg, ${NEON_COLOR}, #2980b9)`,
         WebkitBackgroundClip: "text",
         color: "transparent",
@@ -390,7 +391,7 @@ const styles = {
     },
     
     descriptionInput: {
-        // Ensure multiline text is white
+        
         "& textarea": {
             color: "white !important", 
         },

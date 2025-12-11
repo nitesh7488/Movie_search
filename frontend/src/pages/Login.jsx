@@ -13,9 +13,10 @@ import API from "../api/api";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 
-// ----------------------------------------------------
-// ⭐ Reusable Style Constants (Unchanged)
-// ----------------------------------------------------
+
+//  Reusable Style Constants
+
+
 
 const NEON_COLOR = "#6dd5fa";
 
@@ -24,7 +25,8 @@ const InputLabelStyle = {
         color: "#9bb0c3",
         fontSize: "1rem",
         "&.Mui-focused": { color: NEON_COLOR },
-        "&.Mui-error": { color: "#ff8a8a !important" } // Ensure error label color is consistent
+        "&.Mui-error": { color: "#ff8a8a !important" } 
+        
     },
 };
 
@@ -58,7 +60,7 @@ export default function Login() {
     const [password, setPassword] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
     const [loading, setLoading] = useState(false);
-    const [validationErrors, setValidationErrors] = useState({}); // New state for client-side errors
+    const [validationErrors, setValidationErrors] = useState({}); 
 
     const { login } = useContext(AuthContext);
     const navigate = useNavigate();
@@ -105,11 +107,12 @@ export default function Login() {
         setLoading(false);
     };
     
-    // 3. Input Change Handler (Clear server error and validation error on change)
+    // 3. Input Change Handler
     const handleInputChange = (setter, field, value) => {
         setter(value);
-        setErrorMsg(""); // Clear server error immediately
-        setValidationErrors(prev => ({ ...prev, [field]: undefined })); // Clear field error
+        setErrorMsg(""); 
+        setValidationErrors(prev => ({ ...prev, [field]: undefined })); 
+        
     };
 
     // Allow submission via Enter key
@@ -150,9 +153,9 @@ export default function Login() {
                         onChange={(e) => handleInputChange(setEmail, 'email', e.target.value)}
                         autoFocus
                         InputLabelProps={InputLabelStyle}
-                        InputProps={InputBaseStyle(!!validationErrors.email)} // Dynamic styling for error
-                        error={!!validationErrors.email} // MUI Error prop
-                        helperText={validationErrors.email} // MUI Helper text
+                        InputProps={InputBaseStyle(!!validationErrors.email)} 
+                        error={!!validationErrors.email} 
+                        helperText={validationErrors.email} 
                     />
 
                     {/* Password */}
@@ -163,16 +166,16 @@ export default function Login() {
                         value={password}
                         onChange={(e) => handleInputChange(setPassword, 'password', e.target.value)}
                         InputLabelProps={InputLabelStyle}
-                        InputProps={InputBaseStyle(!!validationErrors.password)} // Dynamic styling for error
-                        error={!!validationErrors.password} // MUI Error prop
-                        helperText={validationErrors.password} // MUI Helper text
+                        InputProps={InputBaseStyle(!!validationErrors.password)} 
+                        error={!!validationErrors.password} 
+                        helperText={validationErrors.password} 
                     />
 
                     {/* Login Button */}
                     <Button
                         fullWidth
                         disabled={loading}
-                        type="submit" // Use type="submit" for form handling
+                        type="submit" 
                         variant="contained"
                         sx={styles.loginButton}
                     >
@@ -202,9 +205,9 @@ export default function Login() {
     );
 }
 
-// ----------------------------------------------------
-// ⭐ Component-Specific Styles (Unchanged)
-// ----------------------------------------------------
+
+//  Component-Specific Styles
+
 
 const styles = {
     mainContainer: {

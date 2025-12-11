@@ -23,7 +23,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import API from "../api/api"; 
 
 // --- Configuration ---
-const NEON_COLOR = "#6dd5fa"; // Primary Neon Blue
+const NEON_COLOR = "#6dd5fa"; 
 const posterFallback = 'https://picsum.photos/seed/movie-fallback/600/900';
 
 export default function MovieDetails() {
@@ -40,24 +40,25 @@ export default function MovieDetails() {
             setError(null);
             
             try {
-                // PRIMARY ATTEMPT: Fetch single movie by ID (Best Practice)
+                
                 let res = await API.get(`/api/movies/${id}`);
                 
-                // Assuming successful single fetch returns the movie object directly
+                
+                
                 if (res.data) {
                     setMovie(res.data);
                 } else {
-                    // Fall through to the fallback if the single fetch was successful but empty
+                    
                     throw new Error("Single movie endpoint returned empty data.");
                 }
                 
             } catch (err) {
                 console.warn(`Primary fetch for movie ID ${id} failed. Attempting fallback...`);
                 
-                // FALLBACK ATTEMPT: Fetch all movies and find the match
+                
                 try {
                     const fallbackRes = await API.get(`/api/movies`);
-                    // Assuming the fallback returns an array of movies under res.data.movies
+                    
                     const found = fallbackRes.data.movies.find(m => m._id === id); 
                     
                     if (found) {
@@ -79,7 +80,7 @@ export default function MovieDetails() {
 
     // 2. Handlers
     const handleClose = () => {
-        navigate('/'); // Navigate back to the main list
+        navigate('/'); 
     };
 
     // 3. Loading and Error States
@@ -97,7 +98,7 @@ export default function MovieDetails() {
             <Container maxWidth="lg" sx={{ mt: { xs: 2, md: 5 }, mb: { xs: 4, md: 5 } }}>
                 <Paper elevation={20} sx={styles.detailPaper}>
                     
-                    {/* ❌ CLOSE/BACK ICON (Top Right) */}
+                    {/* CLOSE/BACK ICON (Top Right) */}
                     <Tooltip title="Close Details (Go Back)">
                         <IconButton 
                             onClick={handleClose} 
@@ -173,9 +174,9 @@ export default function MovieDetails() {
     );
 }
 
-// ----------------------------------------------------
-// ⭐ Styles Object
-// ----------------------------------------------------
+
+//  Styles Object
+
 
 const styles = {
     mainContainer: {

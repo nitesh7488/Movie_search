@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import API from "../api/api";
 import {
     TextField,
     Grid,
@@ -11,11 +10,10 @@ import {
     InputAdornment,
     IconButton,
     CircularProgress,
-    Tooltip, // Import Tooltip
+    Tooltip,
 } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'; 
 import { useNavigate } from "react-router-dom";
 import MovieCard from "../components/MovieCard";
 
@@ -46,9 +44,14 @@ export default function Search() {
         }
     };
 
-    const handleClear = () => {
+    const handleClearInput = () => {
         setQ("");
-        setResults(null);
+        
+    };
+    
+    const handleDismissSearch = () => {
+        
+        navigate('/'); 
     };
 
     const handleKeyDown = (e) => {
@@ -57,11 +60,7 @@ export default function Search() {
         }
     };
     
-    const handleGoBack = () => {
-        navigate('/'); 
-    };
-
-    // --- Styling Functions (Kept for clarity) ---
+    // --- Styling Functions ---
     const inputBaseStyle = {
         color: "#fff",
         fontSize: "1.05rem",
@@ -124,20 +123,19 @@ export default function Search() {
     return (
         <Box sx={styles.mainContainer}>
             
-            {/* 1. Back to Home Button (External Close) */}
-            <Box sx={{ maxWidth: 650, mx: "auto", mb: { xs: 2, sm: 3 } }}>
-                <Button
-                    variant="outlined"
-                    onClick={handleGoBack}
-                    startIcon={<ArrowBackIcon />}
-                    sx={styles.backButton}
-                >
-                    Back to Home
-                </Button>
-            </Box>
-
-            {/* 2. Search Container (The Card) */}
             <Paper elevation={12} sx={styles.searchPaper}>
+                
+                
+                
+                <Tooltip title="Go Back to Home">
+                    <IconButton 
+                        onClick={handleDismissSearch} 
+                        sx={styles.dismissButton}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </Tooltip>
+
                 <Typography variant="h4" textAlign="center" fontWeight="800" sx={styles.title}>
                     <SearchIcon sx={{ mr: 1, verticalAlign: 'middle', color: NEON_COLOR }} /> Search Movies
                 </Typography>
@@ -161,7 +159,7 @@ export default function Search() {
                                 ),
                                 endAdornment: q && (
                                     <InputAdornment position="end">
-                                        <IconButton onClick={handleClear} edge="end" size="small" sx={styles.clearButton}>
+                                        <IconButton onClick={handleClearInput} edge="end" size="small" sx={styles.clearButton}>
                                             <CloseIcon fontSize="small" />
                                         </IconButton>
                                     </InputAdornment>
@@ -180,22 +178,7 @@ export default function Search() {
                         </Button>
                     </Stack>
                     
-                    {/* NEW: Clear/Cancel Search Button (X) placed above the Search Button in the stack */}
-                    {/* This button will only be visible when there is a search query or results */}
-                    {(q.trim() || results) && (
-                        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
-                            <Tooltip title="Clear Search and Results">
-                                <Button
-                                    onClick={handleClear}
-                                    size="small"
-                                    startIcon={<CloseIcon />}
-                                    sx={styles.internalClearButton}
-                                >
-                                    Clear Search
-                                </Button>
-                            </Tooltip>
-                        </Box>
-                    )}
+                    
                 </Stack>
             </Paper>
 
@@ -206,9 +189,9 @@ export default function Search() {
 }
 
 
-// ----------------------------------------------------
-// ⭐ Styles Object
-// ----------------------------------------------------
+
+// Styles Object
+
 const styles = {
     mainContainer: {
         minHeight: "100vh",
@@ -227,12 +210,30 @@ const styles = {
         boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
         backdropFilter: "blur(14px)",
         animation: "fadeIn 0.5s ease-out",
+        position: 'relative', 
     },
+    
+    // NEW: Dismiss Button Styling
+    dismissButton: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+        color: '#ccc',
+        transition: '0.3s',
+        zIndex: 10,
+        '&:hover': {
+            color: NEON_COLOR,
+            bgcolor: 'rgba(255,255,255,0.1)',
+        }
+    },
+    
     title: {
         mb: 3,
         color: NEON_COLOR,
         letterSpacing: "0.5px",
         fontSize: { xs: "1.75rem", sm: "2.25rem" },
+        
+        pt: 1, 
     },
     searchButton: {
         width: { xs: "100%", sm: "auto" },
@@ -255,34 +256,11 @@ const styles = {
             boxShadow: 'none',
         }
     },
-    clearButton: { // Small X inside the text field
+    clearButton: { 
         color: NEON_COLOR,
         "&:hover": {
             color: '#fff',
             bgcolor: 'rgba(255,255,255,0.1)',
-        }
-    },
-    internalClearButton: { // New X button below the search input/button row
-        color: NEON_COLOR,
-        fontWeight: 600,
-        py: 0.5,
-        px: 1.5,
-        borderRadius: 1,
-        transition: '0.3s ease',
-        '&:hover': {
-            bgcolor: `${NEON_COLOR}1A`,
-            boxShadow: `0 0 8px ${NEON_COLOR}44`,
-        }
-    },
-    backButton: {
-        color: NEON_COLOR,
-        borderColor: NEON_COLOR,
-        fontWeight: 600,
-        transition: '0.3s ease',
-        '&:hover': {
-            bgcolor: `${NEON_COLOR}1A`,
-            borderColor: NEON_COLOR,
-            boxShadow: `0 0 10px ${NEON_COLOR}55`,
         }
     },
     statusContainer: {
