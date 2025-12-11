@@ -7,6 +7,7 @@ import {
   Paper,
   Stack,
   MenuItem,
+  Alert,
 } from "@mui/material";
 import API from "../api/api";
 import { useNavigate, Link } from "react-router-dom";
@@ -16,16 +17,47 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("user");
+  const [errorMsg, setErrorMsg] = useState("");
+
   const navigate = useNavigate();
 
   const submit = async () => {
+    setErrorMsg("");
     try {
       await API.post("/api/auth/register", { name, email, password, role });
-      alert("Registered successfully. Please login.");
+      alert("Registered successfully! Please login.");
       navigate("/login");
     } catch (err) {
-      alert(err.response?.data?.message || err.message);
+      setErrorMsg(err.response?.data?.message || "Registration failed.");
     }
+  };
+
+  // 🔥 Reusable perfect input styles
+  const inputBaseStyle = {
+    color: "#fff",
+    fontSize: "1.05rem",
+    fontWeight: 500,
+    background: "rgba(255,255,255,0.07)",
+    borderRadius: 2,
+    height: 56,
+    px: 2,
+
+    "& .MuiOutlinedInput-notchedOutline": {
+      borderColor: "rgba(255,255,255,0.18)",
+    },
+    "&:hover .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#38c5ff",
+    },
+    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#38c5ff",
+      boxShadow: "0 0 8px #38c5ff80",
+    },
+  };
+
+  const labelStyle = {
+    color: "#9fb4c9",
+    fontSize: "1rem",
+    "&.Mui-focused": { color: "#38c5ff", fontWeight: 600 },
   };
 
   return (
@@ -35,181 +67,135 @@ export default function Register() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background:
-          "linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)",
-        p: 2,
+        background: "#0a0f24",
+        px: 2,
       }}
     >
       <Paper
-        elevation={10}
+        elevation={14}
         sx={{
           width: "100%",
-          maxWidth: 450,
+          maxWidth: 460,
           p: 4,
           borderRadius: 4,
-          background: "rgba(255, 255, 255, 0.06)",
-          border: "1px solid rgba(255,255,255,0.18)",
-          boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
-          backdropFilter: "blur(12px)",
+          background: "rgba(255,255,255,0.06)",
+          border: "1px solid rgba(255,255,255,0.12)",
+          backdropFilter: "blur(14px)",
           color: "#fff",
-          animation: "fadeIn 0.6s ease-out",
+          boxShadow: "0 10px 40px rgba(0,0,0,0.55)",
         }}
       >
-        {/* Header */}
+        {/* Title */}
         <Typography
           variant="h4"
           textAlign="center"
-          fontWeight="700"
+          fontWeight={800}
           sx={{
             mb: 3,
-            background: "linear-gradient(90deg, #6dd5fa, #2980b9)",
-            WebkitBackgroundClip: "text",
-            color: "transparent",
+            letterSpacing: "0.5px",
+            color: "#2ed8ff",
           }}
         >
           Create Account
         </Typography>
 
+        {/* Error Box */}
+        {errorMsg && (
+          <Alert
+            severity="error"
+            sx={{
+              mb: 2,
+              borderRadius: 2,
+              background: "rgba(255,0,0,0.15)",
+              border: "1px solid rgba(255,0,0,0.3)",
+              color: "#ff9a9a",
+            }}
+          >
+            {errorMsg}
+          </Alert>
+        )}
+
         <Stack spacing={2}>
-          {/* Name */}
+          {/* NAME */}
           <TextField
             label="Full Name"
             fullWidth
             value={name}
             onChange={(e) => setName(e.target.value)}
-            InputLabelProps={{ style: { color: "#c7c7c7" } }}
-            InputProps={{
-              sx: {
-                color: "#fff",
-                borderRadius: 2,
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "rgba(255,255,255,0.3)",
-                },
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#6dd5fa",
-                },
-                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#6dd5fa",
-                  boxShadow: "0 0 10px #6dd5fa88",
-                },
-              },
-            }}
+            InputLabelProps={{ sx: labelStyle }}
+            InputProps={{ sx: inputBaseStyle }}
           />
 
-          {/* Email */}
+          {/* EMAIL */}
           <TextField
             label="Email"
             type="email"
             fullWidth
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            InputLabelProps={{ style: { color: "#c7c7c7" } }}
-            InputProps={{
-              sx: {
-                color: "#fff",
-                borderRadius: 2,
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "rgba(255,255,255,0.3)",
-                },
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#6dd5fa",
-                },
-                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#6dd5fa",
-                  boxShadow: "0 0 10px #6dd5fa88",
-                },
-              },
-            }}
+            InputLabelProps={{ sx: labelStyle }}
+            InputProps={{ sx: inputBaseStyle }}
           />
 
-          {/* Password */}
+          {/* PASSWORD */}
           <TextField
             label="Password"
             type="password"
             fullWidth
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            InputLabelProps={{ style: { color: "#c7c7c7" } }}
-            InputProps={{
-              sx: {
-                color: "#fff",
-                borderRadius: 2,
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "rgba(255,255,255,0.3)",
-                },
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#6dd5fa",
-                },
-                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#6dd5fa",
-                  boxShadow: "0 0 10px #6dd5fa88",
-                },
-              },
-            }}
+            InputLabelProps={{ sx: labelStyle }}
+            InputProps={{ sx: inputBaseStyle }}
           />
 
-          {/* Role Selector */}
+          {/* ROLE SELECTOR */}
           <TextField
             select
             label="Role"
             fullWidth
             value={role}
             onChange={(e) => setRole(e.target.value)}
-            InputLabelProps={{ style: { color: "#c7c7c7" } }}
-            InputProps={{
-              sx: {
-                color: "#fff",
-                borderRadius: 2,
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "rgba(255,255,255,0.3)",
-                },
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#6dd5fa",
-                },
-                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#6dd5fa",
-                  boxShadow: "0 0 10px #6dd5fa88",
-                },
-              },
-            }}
+            InputLabelProps={{ sx: labelStyle }}
+            InputProps={{ sx: inputBaseStyle }}
           >
             <MenuItem value="user">User</MenuItem>
             <MenuItem value="admin">Admin</MenuItem>
           </TextField>
 
-          {/* Register Button */}
+          {/* REGISTER BUTTON */}
           <Button
             fullWidth
             variant="contained"
             onClick={submit}
             sx={{
               mt: 1,
-              py: 1.2,
-              fontSize: "1rem",
-              fontWeight: "bold",
+              py: 1.3,
+              fontSize: "1.05rem",
+              fontWeight: 700,
               borderRadius: 2,
-              background: "linear-gradient(90deg, #6dd5fa, #2980b9)",
-              boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
+              background: "linear-gradient(90deg, #2ed8ff, #0072ff)",
+              boxShadow: "0 4px 20px rgba(0,0,0,0.5)",
               "&:hover": {
-                background: "linear-gradient(90deg, #81ecec, #3498db)",
+                background: "linear-gradient(90deg, #49e8ff, #0084ff)",
                 transform: "translateY(-2px)",
-                boxShadow: "0 6px 24px rgba(0,0,0,0.5)",
               },
-              transition: "0.25s ease",
             }}
           >
             Register
           </Button>
 
-          {/* Link */}
-          <Typography textAlign="center" sx={{ mt: 1, color: "#ddd" }}>
+          {/* LOGIN LINK */}
+          <Typography
+            textAlign="center"
+            sx={{ mt: 1, color: "#cdd7e3", fontSize: "0.95rem" }}
+          >
             Already have an account?{" "}
             <Link
               to="/login"
               style={{
-                color: "#6dd5fa",
+                color: "#2ed8ff",
+                fontWeight: 700,
                 textDecoration: "none",
-                fontWeight: 600,
               }}
             >
               Login

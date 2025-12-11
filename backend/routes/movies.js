@@ -36,7 +36,7 @@ router.get('/sorted', async (req, res) => {
   } catch (err) { res.status(500).json({ message: err.message }); }
 });
 
-// admin routes
+// GET /movies/:id
 router.post('/', protect, adminOnly, async (req, res) => {
   try {
     const movie = new Movie({ ...req.body, createdBy: req.user._id });

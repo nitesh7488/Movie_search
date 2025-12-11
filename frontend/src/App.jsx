@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import {
   Container,
@@ -7,7 +7,15 @@ import {
   Button,
   Typography,
   Box,
+  IconButton,
+  Drawer,
+  List,
+  ListItemButton,
+  ListItemText,
+  Divider,
+  useMediaQuery,
 } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 
 import Home from "./pages/Home";
 import Search from "./pages/Search";
@@ -16,26 +24,33 @@ import Register from "./pages/Register";
 import AdminAdd from "./pages/AdminAdd";
 import AdminEdit from "./pages/AdminEdit";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
+import MovieDetails from "./components/MovieDetails";
 
 export default function App() {
   const { user, logout } = useContext(AuthContext);
+  const [open, setOpen] = useState(false);
+
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
+  /* Mobile menu toggler */
+  const toggleDrawer = () => setOpen(!open);
 
   return (
     <>
-      {/* PREMIUM NAVBAR */}
+      {/* 🌟 PREMIUM NAVBAR */}
       <AppBar
         position="sticky"
-        elevation={10}
+        elevation={12}
         sx={{
           background: "rgba(15, 12, 41, 0.55)",
-          backdropFilter: "blur(12px)",
-          borderBottom: "1px solid rgba(255,255,255,0.12)",
-          boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
+          backdropFilter: "blur(14px)",
+          borderBottom: "1px solid rgba(255,255,255,0.15)",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.35)",
         }}
       >
-        <Toolbar sx={{ py: 1 }}>
+        <Toolbar sx={{ py: 1, display: "flex", alignItems: "center" }}>
+          
           {/* Logo */}
           <Typography
             variant="h5"
@@ -44,64 +59,124 @@ export default function App() {
             sx={{
               flex: 1,
               textDecoration: "none",
-              fontWeight: "700",
+              fontWeight: 800,
               letterSpacing: 0.8,
               background: "linear-gradient(90deg, #6dd5fa, #2980b9)",
               WebkitBackgroundClip: "text",
               color: "transparent",
               fontSize: "1.7rem",
-              transition: "0.3s",
-              "&:hover": {
-                opacity: 0.8,
-              },
+              transition: ".3s",
+              "&:hover": { opacity: 0.8 },
             }}
           >
             MovieApp
           </Typography>
 
-          {/* Nav Buttons */}
-          <NavButton to="/search">Search</NavButton>
+          {/* Desktop Navigation */}
+          {!isMobile && (
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <NavButton to="/search">Search</NavButton>
 
-          {user ? (
-            <>
-              {user.role === "admin" && (
-                <NavButton to="/admin/add">Admin</NavButton>
+              {user ? (
+                <>
+                  {user.role === "admin" && (
+                    <NavButton to="/admin/add">Admin</NavButton>
+                  )}
+
+                  <Button
+                    onClick={logout}
+                    sx={{
+                      ml: 1,
+                      color: "#fff",
+                      textTransform: "none",
+                      px: 2,
+                      fontSize: "1rem",
+                      "&:hover": {
+                        color: "#6dd5fa",
+                        transform: "translateY(-2px)",
+                      },
+                    }}
+                  >
+                    Logout
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <NavButton to="/login">Login</NavButton>
+                  <NavButton to="/register">Register</NavButton>
+                </>
               )}
+            </Box>
+          )}
 
-              <Button
-                onClick={logout}
-                sx={{
-                  ml: 1,
-                  color: "#fff",
-                  textTransform: "none",
-                  px: 2,
-                  fontSize: "1rem",
-                  transition: "0.25s",
-                  "&:hover": {
-                    color: "#6dd5fa",
-                    transform: "translateY(-2px)",
-                  },
-                }}
-              >
-                Logout
-              </Button>
-            </>
-          ) : (
-            <>
-              <NavButton to="/login">Login</NavButton>
-              <NavButton to="/register">Register</NavButton>
-            </>
+          {/* Mobile Menu Button */}
+          {isMobile && (
+            <IconButton onClick={toggleDrawer} sx={{ color: "#fff" }}>
+              <MenuIcon />
+            </IconButton>
           )}
         </Toolbar>
       </AppBar>
 
-      {/* Page Container */}
+      {/* 📱 MOBILE DRAWER MENU */}
+      <Drawer anchor="right" open={open} onClose={toggleDrawer}>
+        <Box sx={{ width: 240, p: 2 }}>
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 700,
+              mb: 2,
+              background: "linear-gradient(90deg, #6dd5fa, #2980b9)",
+              WebkitBackgroundClip: "text",
+              color: "transparent",
+            }}
+          >
+            MovieApp Menu
+          </Typography>
+
+          <Divider sx={{ mb: 2 }} />
+
+          <List>
+            <MobileItem to="/" text="Home" />
+            <MobileItem to="/search" text="Search" />
+
+            {!user && (
+              <>
+                <MobileItem to="/login" text="Login" />
+                <MobileItem to="/register" text="Register" />
+              </>
+            )}
+
+            {user && (
+              <>
+                {user.role === "admin" && (
+                  <MobileItem to="/admin/add" text="Admin Panel" />
+                )}
+
+                <ListItemButton onClick={logout}>
+                  <ListItemText
+                    primary="Logout"
+                    primaryTypographyProps={{
+                      fontWeight: 700,
+                      color: "#ef5350",
+                    }}
+                  />
+                </ListItemButton>
+              </>
+            )}
+          </List>
+        </Box>
+      </Drawer>
+
+      {/* PAGE CONTENT */}
       <Container sx={{ mt: 4 }}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/search" element={<Search />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/movie/:id" element={<MovieDetails />} />
+
           <Route
             path="/admin/add"
             element={
@@ -110,6 +185,7 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+
           <Route
             path="/admin/edit/:id"
             element={
@@ -124,7 +200,7 @@ export default function App() {
   );
 }
 
-/* 🔥 Custom Premium Nav Button Component */
+/* 🔥 NAV BUTTON (DESKTOP) */
 function NavButton({ to, children }) {
   return (
     <Button
@@ -132,7 +208,7 @@ function NavButton({ to, children }) {
       to={to}
       sx={{
         color: "#fff",
-        mx: 0.5,
+        mx: 1,
         textTransform: "none",
         fontSize: "1rem",
         borderRadius: 1,
@@ -146,5 +222,17 @@ function NavButton({ to, children }) {
     >
       {children}
     </Button>
+  );
+}
+
+/* 📱 MOBILE NAV ITEM */
+function MobileItem({ to, text }) {
+  return (
+    <ListItemButton component={Link} to={to}>
+      <ListItemText
+        primary={text}
+        primaryTypographyProps={{ fontWeight: 600, fontSize: "1rem" }}
+      />
+    </ListItemButton>
   );
 }

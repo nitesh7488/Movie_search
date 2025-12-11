@@ -6,6 +6,7 @@ import {
   Typography,
   Paper,
   Stack,
+  Alert,
 } from "@mui/material";
 import API from "../api/api";
 import { AuthContext } from "../context/AuthContext";
@@ -14,17 +15,25 @@ import { useNavigate, Link } from "react-router-dom";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const submit = async () => {
+    setLoading(true);
+    setErrorMsg("");
+
     try {
       const res = await API.post("/api/auth/login", { email, password });
       login(res.data);
       navigate("/");
     } catch (err) {
-      alert(err.response?.data?.message || err.message);
+      setErrorMsg(err.response?.data?.message || "Invalid email or password.");
     }
+
+    setLoading(false);
   };
 
   return (
@@ -34,40 +43,57 @@ export default function Login() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background:
-          "linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)",
-        p: 2,
+        px: 2,
+        py: 3,
+        background: "radial-gradient(circle at top, #10101a, #07070d)",
       }}
     >
       <Paper
-        elevation={10}
+        elevation={15}
         sx={{
           width: "100%",
-          maxWidth: 420,
-          p: 4,
+          maxWidth: 430,
+          p: { xs: 3, sm: 4 },
           borderRadius: 4,
-          background: "rgba(255, 255, 255, 0.06)",
-          border: "1px solid rgba(255,255,255,0.18)",
-          boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
-          backdropFilter: "blur(12px)",
+          background: "rgba(17, 25, 40, 0.55)",
+          border: "1px solid rgba(255,255,255,0.08)",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+          backdropFilter: "blur(14px)",
           color: "#fff",
-          animation: "fadeIn 0.6s ease-out",
         }}
       >
-        {/* Header */}
+        {/* Title */}
         <Typography
           variant="h4"
           textAlign="center"
-          fontWeight="700"
+          fontWeight="800"
           sx={{
             mb: 3,
-            background: "linear-gradient(90deg, #6dd5fa, #2980b9)",
+            letterSpacing: 0.8,
+            background: "linear-gradient(90deg, #6dd5fa, #1b9cfc)",
             WebkitBackgroundClip: "text",
             color: "transparent",
           }}
         >
-          Welcome Back
+          Login
         </Typography>
+
+        {/* Error Box */}
+        {errorMsg && (
+          <Alert
+            severity="error"
+            sx={{
+              mb: 2,
+              borderRadius: 2,
+              fontWeight: 600,
+              background: "rgba(255,0,0,0.15)",
+              color: "#ff8a8a",
+              border: "1px solid rgba(255,0,0,0.25)",
+            }}
+          >
+            {errorMsg}
+          </Alert>
+        )}
 
         <Stack spacing={2}>
           {/* Email */}
@@ -77,21 +103,33 @@ export default function Login() {
             fullWidth
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            variant="outlined"
-            InputLabelProps={{ style: { color: "#c7c7c7" } }}
+            autoFocus
+            InputLabelProps={{
+              sx: {
+                color: "#9bb0c3",
+                "&.Mui-focused": { color: "#6dd5fa" },
+              },
+            }}
             InputProps={{
               sx: {
                 color: "#fff",
+                fontSize: "1rem",
+                height: 50,
                 borderRadius: 2,
+                background: "rgba(255,255,255,0.08)",
+                px: 2,
                 "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "rgba(255,255,255,0.3)",
+                  borderColor: "rgba(255,255,255,0.15)",
                 },
                 "&:hover .MuiOutlinedInput-notchedOutline": {
                   borderColor: "#6dd5fa",
                 },
                 "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                   borderColor: "#6dd5fa",
-                  boxShadow: "0 0 10px #6dd5fa88",
+                  boxShadow: "0 0 10px rgba(109,213,250,0.6)",
+                },
+                "& input::placeholder": {
+                  color: "#9bb0c3",
                 },
               },
             }}
@@ -104,55 +142,72 @@ export default function Login() {
             fullWidth
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            InputLabelProps={{ style: { color: "#c7c7c7" } }}
+            InputLabelProps={{
+              sx: {
+                color: "#9bb0c3",
+                "&.Mui-focused": { color: "#6dd5fa" },
+              },
+            }}
             InputProps={{
               sx: {
                 color: "#fff",
+                fontSize: "1rem",
+                height: 50,
                 borderRadius: 2,
+                background: "rgba(255,255,255,0.08)",
+                px: 2,
                 "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "rgba(255,255,255,0.3)",
+                  borderColor: "rgba(255,255,255,0.15)",
                 },
                 "&:hover .MuiOutlinedInput-notchedOutline": {
                   borderColor: "#6dd5fa",
                 },
                 "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                   borderColor: "#6dd5fa",
-                  boxShadow: "0 0 10px #6dd5fa88",
+                  boxShadow: "0 0 10px rgba(109,213,250,0.6)",
                 },
               },
             }}
           />
 
-          {/* Button */}
+          {/* Login Button */}
           <Button
-            onClick={submit}
             fullWidth
+            disabled={loading}
+            onClick={submit}
             variant="contained"
             sx={{
               mt: 1,
-              py: 1.2,
-              fontSize: "1rem",
+              py: 1.3,
+              fontSize: "1.05rem",
               fontWeight: "bold",
-              borderRadius: 2,
-              background: "linear-gradient(90deg, #6dd5fa, #2980b9)",
+              borderRadius: 3,
+              background: "linear-gradient(90deg, #6dd5fa, #1b9cfc)",
               boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
+              transition: ".25s",
               "&:hover": {
                 background: "linear-gradient(90deg, #81ecec, #3498db)",
                 transform: "translateY(-2px)",
-                boxShadow: "0 6px 24px rgba(0,0,0,0.5)",
+                boxShadow: "0 6px 28px rgba(0,0,0,0.5)",
               },
-              transition: "0.25s ease",
             }}
           >
-            Login
+            {loading ? "Logging in..." : "LOGIN"}
           </Button>
 
-          {/* Link */}
-          <Typography textAlign="center" sx={{ mt: 1, color: "#ddd" }}>
+          {/* Register Link */}
+          <Typography
+            textAlign="center"
+            sx={{ mt: 1, color: "#ccc", fontSize: "0.95rem" }}
+          >
             Don't have an account?{" "}
             <Link
               to="/register"
-              style={{ color: "#6dd5fa", textDecoration: "none", fontWeight: 600 }}
+              style={{
+                color: "#6dd5fa",
+                fontWeight: 600,
+                textDecoration: "none",
+              }}
             >
               Register
             </Link>

@@ -1,26 +1,32 @@
-import React, { useEffect, useState, useContext } from 'react';
-import API from '../api/api';
+import React, { useEffect, useState, useContext } from "react";
+import API from "../api/api";
 import {
   Grid,
   Pagination,
   Stack,
-  Select,
-  MenuItem,
   Typography,
   Box,
-  FormControl,
-  InputLabel,
-  Container
-} from '@mui/material';
-import MovieCard from '../components/MovieCard';
-import { AuthContext } from '../context/AuthContext';
+  Container,
+  Chip,
+  Paper,
+} from "@mui/material";
+import MovieCard from "../components/MovieCard";
+import { AuthContext } from "../context/AuthContext";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const [movies, setMovies] = useState([]);
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState(1);
   const { user } = useContext(AuthContext);
-  const [sortBy, setSortBy] = useState('imdbRank');
+  const [sortBy, setSortBy] = useState("imdbRank");
+
+  const SORT_OPTIONS = [
+    { label: "Rank", value: "imdbRank" },
+    { label: "Rating", value: "rating" },
+    { label: "Title", value: "title" },
+    { label: "Year", value: "year" },
+  ];
 
   const fetchMovies = async (p = 1) => {
     try {
@@ -44,86 +50,110 @@ export default function Home() {
     }
   };
 
-  // Initial load
   useEffect(() => {
-    (async () => await fetchMovies(1))();
+    fetchMovies(1);
   }, []);
 
-  // Sorting effect
   useEffect(() => {
-    (async () => {
-      if (sortBy === "imdbRank") await fetchMovies(1);
-      else await fetchSortedMovies(sortBy);
-    })();
+    if (sortBy === "imdbRank") fetchMovies(1);
+    else fetchSortedMovies(sortBy);
   }, [sortBy]);
 
   const handleDelete = async (id) => {
-    if (!confirm('Delete?')) return;
+    if (!confirm("Delete?")) return;
     await API.delete(`/api/movies/${id}`);
 
-    if (sortBy === "imdbRank") await fetchMovies(page);
-    else await fetchSortedMovies(sortBy);
+    if (sortBy === "imdbRank") fetchMovies(page);
+    else fetchSortedMovies(sortBy);
   };
 
   return (
-    <Container maxWidth="lg" sx={{ pt: 4, pb: 6 }}>
-      
-      {/* Header Section */}
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        sx={{ mb: 4, px: 1 }}
+    <Container maxWidth="xl" sx={{ pt: 5, pb: 8 }}>
+
+      {/* HEADER */}
+      <Paper
+        elevation={4}
+        sx={{
+          p: 4,
+          mb: 4,
+          borderRadius: 4,
+          textAlign: "center",
+          backdropFilter: "blur(8px)",
+          background: "rgba(255,255,255,0.75)",
+        }}
       >
-        <Typography variant="h5" fontWeight="bold">
-          Top Movies
-        </Typography>
+        <Stack spacing={2} alignItems="center">
+          <Typography variant="h4" fontWeight="bold" sx={{ letterSpacing: 0.5 }}>
+            🎬 Top Movies
+          </Typography>
 
-        <FormControl size="small" sx={{ minWidth: 160 }}>
-          <InputLabel>Sort By</InputLabel>
-          <Select
-            value={sortBy}
-            label="Sort By"
-            onChange={(e) => setSortBy(e.target.value)}
-          >
-            <MenuItem value="imdbRank">Rank</MenuItem>
-            <MenuItem value="rating">Rating</MenuItem>
-            <MenuItem value="title">Title</MenuItem>
-            <MenuItem value="year">Year</MenuItem>
-          </Select>
-        </FormControl>
-      </Stack>
+          {/* Chips Row */}
+          <Stack direction="row" spacing={1} flexWrap="wrap" justifyContent="center">
+            {SORT_OPTIONS.map((opt) => (
+              <Chip
+                key={opt.value}
+                label={opt.label}
+                clickable
+                onClick={() => setSortBy(opt.value)}
+                color={sortBy === opt.value ? "primary" : "default"}
+                sx={{
+                  fontWeight: "bold",
+                  px: 2,
+                  py: 1.5,
+                  fontSize: "0.9rem",
+                  borderRadius: "20px",
+                  "&:hover": { opacity: 0.85 },
+                }}
+              />
+            ))}
+          </Stack>
+        </Stack>
+      </Paper>
 
-      {/* Movies Grid */}
+      {/* MOVIE GRID */}
       {movies.length === 0 ? (
-        <Box textAlign="center" mt={6}>
+        <Box textAlign="center" mt={8}>
           <Typography variant="h6" color="text.secondary">
             No movies found.
           </Typography>
         </Box>
       ) : (
-        <Grid container spacing={3} sx={{ px: 1 }}>
-          {movies.map((m) => (
-            <Grid item key={m._id} xs={12} sm={6} md={3}>
-              <MovieCard
-                movie={m}
-                admin={user && user.role === 'admin'}
-                onDelete={handleDelete}
-              />
+        <Grid container spacing={3} justifyContent="center">
+          {movies.map((m, i) => (
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={m._id}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: i * 0.05 }}
+                style={{ width: "100%" }}
+              >
+                <MovieCard
+                  movie={m}
+                  admin={user && user.role === "admin"}
+                  onDelete={handleDelete}
+                />
+              </motion.div>
             </Grid>
           ))}
         </Grid>
       )}
 
-      {/* Pagination – only in Rank mode */}
-      {sortBy === "imdbRank" && (
-        <Stack alignItems="center" sx={{ mt: 5 }}>
+      {/* PAGINATION */}
+      {sortBy === "imdbRank" && pages > 1 && (
+        <Stack alignItems="center" sx={{ mt: 6 }}>
           <Pagination
             color="primary"
             size="large"
             count={pages}
             page={page}
             onChange={(e, v) => fetchMovies(v)}
+            sx={{
+              "& .MuiPaginationItem-root": {
+                fontSize: "1.1rem",
+                fontWeight: "bold",
+              },
+            }}
           />
         </Stack>
       )}
