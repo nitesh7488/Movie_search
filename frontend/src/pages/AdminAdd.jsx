@@ -23,7 +23,7 @@ export default function AdminAdd() {
   const navigate = useNavigate();
 
   const submit = async () => {
-    await API.post("/movies", movie);
+    await API.post("/api/movies", movie);
     alert("Movie Added Successfully!");
     navigate("/");
   };

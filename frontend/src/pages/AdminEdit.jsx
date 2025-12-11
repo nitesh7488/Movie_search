@@ -26,7 +26,7 @@ export default function AdminEdit() {
   }, [id]);
 
   const submit = async () => {
-    await API.put(`/movies/${id}`, movie);
+    await API.put(`/api/movies/${id}`, movie);
     alert("Movie Updated Successfully!");
     navigate("/");
   };

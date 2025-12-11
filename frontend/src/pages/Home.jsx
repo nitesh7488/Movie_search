@@ -24,7 +24,7 @@ export default function Home() {
 
   const fetchMovies = async (p = 1) => {
     try {
-      const res = await API.get(`/movies?page=${p}&limit=12`);
+      const res = await API.get(`/api/movies?page=${p}&limit=12`);
       setMovies(res.data.movies);
       setPage(res.data.page);
       setPages(res.data.pages);
@@ -35,7 +35,7 @@ export default function Home() {
 
   const fetchSortedMovies = async (sort) => {
     try {
-      const res = await API.get(`/movies/sorted?by=${sort}&order=desc`);
+      const res = await API.get(`/api/movies/sorted?by=${sort}&order=desc`);
       setMovies(res.data);
       setPage(1);
       setPages(1);
@@ -59,7 +59,7 @@ export default function Home() {
 
   const handleDelete = async (id) => {
     if (!confirm('Delete?')) return;
-    await API.delete(`/movies/${id}`);
+    await API.delete(`/api/movies/${id}`);
 
     if (sortBy === "imdbRank") await fetchMovies(page);
     else await fetchSortedMovies(sortBy);

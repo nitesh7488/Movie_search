@@ -17,7 +17,7 @@ export default function Search() {
 
   const doSearch = async () => {
     if (!q.trim()) return;
-    const res = await API.get(`/movies/search?q=${encodeURIComponent(q)}`);
+    const res = await API.get(`/api/movies/search?q=${encodeURIComponent(q)}`);
     setResults(res.data);
   };
 
