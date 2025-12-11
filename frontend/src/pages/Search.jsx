@@ -16,6 +16,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from "react-router-dom";
 import MovieCard from "../components/MovieCard";
+import API from "../api/api"; // Ensure API is imported
 
 // Define the NEON_COLOR for consistency
 const NEON_COLOR = "#38c5ff";
@@ -34,23 +35,27 @@ export default function Search() {
 
         setLoading(true);
         try {
+            // Ensure this API call is correctly configured in your project
             const res = await API.get(`/api/movies/search?q=${encodeURIComponent(q)}`);
-            setResults(res.data);
+            // Assuming res.data is the array of search results
+            setResults(res.data); 
         } catch (error) {
             console.error("Search failed:", error);
-            setResults([]);
+            // Show empty results on failure, or handle error display if desired
+            setResults([]); 
         } finally {
             setLoading(false);
         }
     };
 
+    // ⭐ FIX 1: Reset both query and results when clearing input
     const handleClearInput = () => {
         setQ("");
-        
+        setResults(null); 
     };
     
+    // This button navigates away from the search page
     const handleDismissSearch = () => {
-        
         navigate('/'); 
     };
 
@@ -60,7 +65,7 @@ export default function Search() {
         }
     };
     
-    // --- Styling Functions ---
+    // --- Styling Functions (Kept for clarity) ---
     const inputBaseStyle = {
         color: "#fff",
         fontSize: "1.05rem",
@@ -94,6 +99,7 @@ export default function Search() {
         }
         
         if (results === null) {
+            // Initial state - only shown if results is explicitly null
             return (
                 <Typography variant="h6" textAlign="center" sx={styles.initialMessage}>
                     Type something above to search for movies 🎬
@@ -102,6 +108,7 @@ export default function Search() {
         }
 
         if (results.length === 0) {
+            // No results found message
             return (
                 <Typography variant="h6" textAlign="center" sx={styles.initialMessage}>
                     Sorry, no results found for **"{q}"** 😔. Try another search!
@@ -125,8 +132,7 @@ export default function Search() {
             
             <Paper elevation={12} sx={styles.searchPaper}>
                 
-                
-                
+                {/* Dismiss Button (X) */}
                 <Tooltip title="Go Back to Home">
                     <IconButton 
                         onClick={handleDismissSearch} 
@@ -177,8 +183,6 @@ export default function Search() {
                             {loading ? <CircularProgress size={24} sx={{ color: 'white' }} /> : 'Search'}
                         </Button>
                     </Stack>
-                    
-                    
                 </Stack>
             </Paper>
 
@@ -189,9 +193,9 @@ export default function Search() {
 }
 
 
-
-// Styles Object
-
+// ----------------------------------------------------
+// ⭐ Styles Object
+// ----------------------------------------------------
 const styles = {
     mainContainer: {
         minHeight: "100vh",
@@ -213,7 +217,6 @@ const styles = {
         position: 'relative', 
     },
     
-    // NEW: Dismiss Button Styling
     dismissButton: {
         position: 'absolute',
         top: 10,
@@ -232,7 +235,6 @@ const styles = {
         color: NEON_COLOR,
         letterSpacing: "0.5px",
         fontSize: { xs: "1.75rem", sm: "2.25rem" },
-        
         pt: 1, 
     },
     searchButton: {
