@@ -15,7 +15,9 @@ import {
   Divider,
   useMediaQuery,
 } from "@mui/material";
+
 import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 
 import Home from "./pages/Home";
 import Search from "./pages/Search";
@@ -33,12 +35,11 @@ export default function App() {
 
   const isMobile = useMediaQuery("(max-width: 768px)");
 
-  /* Mobile menu toggler */
   const toggleDrawer = () => setOpen(!open);
 
   return (
     <>
-      {/* PREMIUM NAVBAR */}
+      {/* NAVBAR */}
       <AppBar
         position="sticky"
         elevation={12}
@@ -50,8 +51,6 @@ export default function App() {
         }}
       >
         <Toolbar sx={{ py: 1, display: "flex", alignItems: "center" }}>
-          
-          {/* Logo */}
           <Typography
             variant="h5"
             component={Link}
@@ -66,13 +65,12 @@ export default function App() {
               color: "transparent",
               fontSize: "1.7rem",
               transition: ".3s",
-              "&:hover": { opacity: 0.8 },
             }}
           >
             MovieApp
           </Typography>
 
-          {/* Desktop Navigation */}
+          {/* DESKTOP NAV */}
           {!isMobile && (
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <NavButton to="/search">Search</NavButton>
@@ -109,7 +107,7 @@ export default function App() {
             </Box>
           )}
 
-          {/* Mobile Menu Button */}
+          {/* MOBILE MENU BUTTON */}
           {isMobile && (
             <IconButton onClick={toggleDrawer} sx={{ color: "#fff" }}>
               <MenuIcon />
@@ -118,14 +116,40 @@ export default function App() {
         </Toolbar>
       </AppBar>
 
-      {/* MOBILE DRAWER MENU */}
+      {/* MOBILE MENU */}
       <Drawer anchor="right" open={open} onClose={toggleDrawer}>
-        <Box sx={{ width: 240, p: 2 }}>
+        <Box
+          sx={{
+            width: 260,
+            p: 2,
+            position: "relative",
+            minHeight: "100%",
+          }}
+        >
+          {/* FIXED CLOSE BUTTON (VISIBLE NOW) */}
+          <IconButton
+            onClick={toggleDrawer}
+            sx={{
+              position: "absolute",
+              top: 10,
+              right: 10,
+              color: "#fff",
+              background: "rgba(0,0,0,0.55)",
+              borderRadius: "50%",
+              width: 36,
+              height: 36,
+              "&:hover": { background: "rgba(0,0,0,0.75)" },
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+
           <Typography
             variant="h6"
             sx={{
               fontWeight: 700,
               mb: 2,
+              mt: 5,
               background: "linear-gradient(90deg, #6dd5fa, #2980b9)",
               WebkitBackgroundClip: "text",
               color: "transparent",
@@ -168,7 +192,7 @@ export default function App() {
         </Box>
       </Drawer>
 
-      {/* PAGE CONTENT */}
+      {/* MAIN PAGE CONTENT */}
       <Container sx={{ mt: 4 }}>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -200,7 +224,7 @@ export default function App() {
   );
 }
 
-/*  NAV BUTTON (DESKTOP) */
+/* DESKTOP BUTTON */
 function NavButton({ to, children }) {
   return (
     <Button
@@ -211,9 +235,7 @@ function NavButton({ to, children }) {
         mx: 1,
         textTransform: "none",
         fontSize: "1rem",
-        borderRadius: 1,
         px: 2,
-        transition: "0.25s",
         "&:hover": {
           color: "#6dd5fa",
           transform: "translateY(-2px)",
@@ -225,13 +247,13 @@ function NavButton({ to, children }) {
   );
 }
 
-/* MOBILE NAV ITEM */
+/* MOBILE ITEM */
 function MobileItem({ to, text }) {
   return (
     <ListItemButton component={Link} to={to}>
       <ListItemText
         primary={text}
-        primaryTypographyProps={{ fontWeight: 600, fontSize: "1rem" }}
+        primaryTypographyProps={{ fontWeight: 600 }}
       />
     </ListItemButton>
   );
